@@ -1,13 +1,13 @@
 import { api } from './auth';
 
 export interface Question {
-  id: string;
-  text: string;
+  id?: string;
+  question: string;
   type: 'MULTIPLE_CHOICE' | 'TRUE_FALSE' | 'SHORT_ANSWER' | 'ESSAY';
   options?: string[];
   correctAnswer?: string;
   points: number;
-  order: number;
+  order?: number;
 }
 
 export interface Exam {
@@ -15,7 +15,7 @@ export interface Exam {
   title: string;
   description?: string;
   timeLimit?: number;
-  isPublic: boolean;
+  isActive?: boolean;
   shareLink?: string;
   createdAt: string;
   updatedAt: string;
@@ -31,8 +31,7 @@ export interface CreateExamData {
   title: string;
   description?: string;
   timeLimit?: number;
-  isPublic: boolean;
-  questions: Omit<Question, 'id'>[];
+  questions: Question[];
 }
 
 export interface ExamResponse {

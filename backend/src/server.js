@@ -4,6 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const session = require('express-session');
+const passport = require('./config/passport');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -23,6 +25,22 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Session configuration (must be before passport middleware)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-session-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Rate limiting
 const limiter = rateLimit({

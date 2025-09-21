@@ -17,11 +17,17 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String
-  password  String
+  password  String?  // Made optional for Google OAuth users
   role      String   @default("STUDENT")
   isEmailVerified Boolean @default(false)
   emailVerificationToken String?
   emailVerificationExpires DateTime?
+  
+  // Google OAuth fields
+  googleId  String?  @unique
+  avatar    String?  // Profile picture URL
+  provider  String   @default("local") // "local" or "google"
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
